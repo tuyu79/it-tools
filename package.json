@@ -22,6 +22,7 @@
     "developer-productivity"
   ],
   "scripts": {
+    "dev:tauri": "pnpm tauri dev",
     "dev": "vite",
     "build": "vue-tsc --noEmit && NODE_OPTIONS=--max_old_space_size=4096 vite build",
     "preview": "vite preview --port 5050",
@@ -111,6 +112,7 @@
     "@intlify/unplugin-vue-i18n": "^2.0.0",
     "@playwright/test": "^1.32.3",
     "@rushstack/eslint-patch": "^1.2.0",
+    "@tauri-apps/cli": "^2.5.0",
     "@tsconfig/node18": "^18.2.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/crypto-js": "^4.1.1",
