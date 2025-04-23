@@ -6,11 +6,15 @@
     "linux"
   ],
   "windows": [
-    "main"
+    "main","my-label"
   ],
   "permissions": [
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
-    "global-shortcut:allow-unregister"
+    "global-shortcut:allow-unregister",
+    "core:webview:allow-create-webview",
+    "core:webview:allow-create-webview-window",
+    "core:window:allow-show",
+    "clipboard-manager:allow-write-text"
   ]
 }

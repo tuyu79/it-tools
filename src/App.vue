@@ -1,9 +1,13 @@
-<script setup lang="ts">
+<script setup lang='ts'>
+import { WebviewWindow } from '@tauri-apps/api/webviewWindow';
+
 import { RouterView, useRoute } from 'vue-router';
 import { NGlobalStyle, NMessageProvider, NNotificationProvider, darkTheme } from 'naive-ui';
 import { darkThemeOverrides, lightThemeOverrides } from './themes';
 import { layouts } from './layouts';
 import { useStyleStore } from './stores/style.store';
+import CButton from '@/ui/c-button/c-button.vue';
+import { listen } from '@tauri-apps/api/event';
 
 const route = useRoute();
 const layout = computed(() => route?.meta?.layout ?? layouts.base);
@@ -18,14 +22,40 @@ syncRef(
   locale,
   useStorage('locale', locale),
 );
+
+const handleCreateNewWindow = () => {
+  const webview = new WebviewWindow('my-label', {
+    url: '/shortcut',
+    x: 200,
+    y: 200,
+    width: 300,
+    height: 400,
+  });
+
+  webview.once('tauri://created', function() {
+    // webview successfully created
+    webview.show();
+  });
+  webview.once('tauri://error', function(e) {
+    // an error happened creating the webview
+    console.error('error when creating webview', e);
+  });
+};
+
+onMounted(() => {
+  listen('open-shortcut', handleCreateNewWindow);
+});
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :theme-overrides="themeOverrides">
+  <n-config-provider :theme='theme' :theme-overrides='themeOverrides'>
     <NGlobalStyle />
-    <NMessageProvider placement="bottom">
-      <NNotificationProvider placement="bottom-right">
-        <component :is="layout">
+    <NMessageProvider placement='bottom'>
+      <NNotificationProvider placement='bottom-right'>
+        <component :is='layout'>
+          <c-button @click='handleCreateNewWindow'>
+            Create new window
+          </c-button>
           <RouterView />
         </component>
       </NNotificationProvider>
