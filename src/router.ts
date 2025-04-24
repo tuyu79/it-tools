@@ -31,6 +31,9 @@ const router = createRouter({
       path: '/shortcut',
       name: 'shortcut',
       component: ShortcutPage,
+      meta:{
+        layout: layouts.shortcut,
+      }
     },
     {
       path: '/about',

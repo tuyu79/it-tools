@@ -36,8 +36,8 @@ const handleCreateNewWindow = async () => {
     // x: 200,
     // y: 200,
     center: true,
-    width: 300,
-    height: 400,
+    width: 305,
+    height: 600,
     alwaysOnTop: true,
   });
 
@@ -66,13 +66,9 @@ onMounted(() => {
 
 <template>
   <n-config-provider :theme='theme' :theme-overrides='themeOverrides'>
-    <NGlobalStyle />
     <NMessageProvider placement='bottom'>
       <NNotificationProvider placement='bottom-right'>
         <component :is='layout'>
-          <c-button @click='handleCreateNewWindow'>
-            Create new window
-          </c-button>
           <RouterView />
         </component>
       </NNotificationProvider>
