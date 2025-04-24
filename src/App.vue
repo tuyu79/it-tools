@@ -24,14 +24,14 @@ syncRef(
 );
 
 const handleCreateNewWindow = async () => {
-  const existedOne = await WebviewWindow.getByLabel('my-label');
+  const existedOne = await WebviewWindow.getByLabel('shortcut');
   if (existedOne) {
     console.log('existed one');
     await existedOne.setFocus();
     return;
   }
 
-  const webview = new WebviewWindow('my-label', {
+  const webview = new WebviewWindow('shortcut', {
     url: '/shortcut',
     // x: 200,
     // y: 200,
