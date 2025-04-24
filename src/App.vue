@@ -23,13 +23,22 @@ syncRef(
   useStorage('locale', locale),
 );
 
-const handleCreateNewWindow = () => {
+const handleCreateNewWindow = async () => {
+  const existedOne = await WebviewWindow.getByLabel('my-label');
+  if (existedOne) {
+    console.log('existed one');
+    await existedOne.setFocus();
+    return;
+  }
+
   const webview = new WebviewWindow('my-label', {
     url: '/shortcut',
-    x: 200,
-    y: 200,
+    // x: 200,
+    // y: 200,
+    center: true,
     width: 300,
     height: 400,
+    alwaysOnTop: true,
   });
 
   webview.once('tauri://created', function() {
@@ -39,6 +48,14 @@ const handleCreateNewWindow = () => {
   webview.once('tauri://error', function(e) {
     // an error happened creating the webview
     console.error('error when creating webview', e);
+  });
+
+  const focusListener = await webview.listen('tauri://focus', function(e) {
+    console.log('focus', e);
+  });
+  webview.onCloseRequested((e) => {
+    focusListener();
+    console.log('close requested', e);
   });
 };
 
