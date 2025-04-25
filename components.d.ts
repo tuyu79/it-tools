@@ -196,7 +196,6 @@ declare module '@vue/runtime-core' {
     SafelinkDecoder: typeof import('./src/tools/safelink-decoder/safelink-decoder.vue')['default']
     'Shortcut.layout': typeof import('./src/layouts/shortcut.layout.vue')['default']
     'Shortcut.page': typeof import('./src/pages/Shortcut.page.vue')['default']
-    'Shortcut.page.vuew': typeof import('./src/pages/Shortcut.page.vuew.vue')['default']
     SlugifyString: typeof import('./src/tools/slugify-string/slugify-string.vue')['default']
     SpanCopyable: typeof import('./src/components/SpanCopyable.vue')['default']
     SqlPrettify: typeof import('./src/tools/sql-prettify/sql-prettify.vue')['default']

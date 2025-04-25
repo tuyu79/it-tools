@@ -38,7 +38,7 @@ import { v4 as generateUuidV4 } from 'uuid';
 import { invoke } from '@tauri-apps/api/core';
 import { withDefaultOnError } from '@/utils/defaults';
 import { formatISO, formatISO9075, format } from 'date-fns';
-import { warn, debug, trace, info, error } from '@tauri-apps/plugin-log';
+import { error } from '@tauri-apps/plugin-log';
 
 defineOptions({ name: 'Shortcut.page.vuew' });
 
