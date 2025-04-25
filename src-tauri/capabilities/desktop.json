@@ -6,7 +6,8 @@
     "linux"
   ],
   "windows": [
-    "main","my-label"
+    "main",
+    "my-label"
   ],
   "permissions": [
     "global-shortcut:allow-is-registered",
@@ -17,6 +18,7 @@
     "core:window:allow-show",
     "core:window:allow-set-focus",
     "core:window:allow-destroy",
-    "clipboard-manager:allow-write-text"
+    "clipboard-manager:allow-write-text",
+    "log:default"
   ]
 }

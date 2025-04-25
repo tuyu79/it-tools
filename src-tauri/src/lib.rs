@@ -6,7 +6,7 @@ use tauri::{
     AppHandle, Manager,
 };
 use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
-use tauri_plugin_notification::NotificationExt;
+use homedir::my_home;
 
 #[tauri::command]
 fn paste_at_cursor(text: String) -> Result<(), String> {
@@ -19,18 +19,41 @@ fn paste_at_cursor(text: String) -> Result<(), String> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+
+    let context: tauri::Context<tauri::Wry> = tauri::generate_context!();
+    let identifier = &context.config().identifier;
+
+    let mut my_home = my_home().unwrap().expect("no user home");
+    my_home.push("Library/Logs");
+    my_home.push(identifier);
+
+    let home_dir = my_home.display();
+    // my_home.
+    println!("home dir {home_dir}");
+
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level(log::LevelFilter::Info)
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::Folder {
+                        path: my_home,
+                        file_name: None,
+                    },
+                ))
+                .build(),
+        )
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
-            // debug
-            if cfg!(debug_assertions) {
-                app.handle().plugin(
-                    tauri_plugin_log::Builder::default()
-                        .level(log::LevelFilter::Info)
-                        .build(),
-                )?;
-            }
+            // // debug
+            // if cfg!(debug_assertions) {
+            //     app.handle().plugin(
+            //         tauri_plugin_log::Builder::default()
+            //             .level(log::LevelFilter::Info)
+            //             .build(),
+            //     )?;
+            // }
 
             // register shortcut
             let ctrl_n_shortcut =
@@ -71,7 +94,7 @@ pub fn run() {
             let show_main = MenuItem::with_id(app, "main", "Main", true, None::<&str>)?;
             let show_shortcut = MenuItem::with_id(app, "shortcut", "Shortcut", true, None::<&str>)?;
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
-            let menu = Menu::with_items(app, &[&show_main, &show_shortcut,&quit_i])?;
+            let menu = Menu::with_items(app, &[&show_main, &show_shortcut, &quit_i])?;
 
             TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
@@ -79,7 +102,7 @@ pub fn run() {
                 .show_menu_on_left_click(true)
                 .on_menu_event(|app: &AppHandle, event| match event.id.as_ref() {
                     "main" => {
-                        app.get_window("main").unwrap().show();
+                        let _ = app.get_window("main").unwrap().show();
                     }
                     "shortcut" => {
                         let r = app.get_window("shortcut");
@@ -104,6 +127,6 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![paste_at_cursor]) // 可以添加其他命令
-        .run(tauri::generate_context!())
+        .run(context)
         .expect("Run Tauri App Failed");
 }
